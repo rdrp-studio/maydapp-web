@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="MAYDAPP prepara tu llamada de socorro por radio VHF (MAYDAY, PAN-PAN, SÉCURITÉ) con tu posición GPS y los datos de tu barco. Mapa de la costa española sin conexión, fichas de emergencia, partes de AEMET y radioavisos.">
+<meta property="og:title" content="MAYDAPP · Asistente de llamadas de socorro por VHF">
+<meta property="og:description" content="Tu llamada de socorro, lista para leer por radio. Para la costa española.">
+<meta property="og:image" content="img/og.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="img/icono.png">
+<link rel="apple-touch-icon" href="img/icono.png">
+<title>MAYDAPP</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,600..900&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>*,*::before,*::after{box-sizing:border-box}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
+<style>
+  /* Layout: noche en el mar. Bandas a todo el ancho en azul marino, contenido a 1180 px; los colores de las cuatro llamadas (rojo, naranja, azul, ámbar) son el único acento fuerte. */
+  :root{
+    --night:#0a1729;
+    --deep:#0e2038;
+    --panel:#13294a;
+    --line:rgba(214,226,244,0.11);
+    --paper:#eef3fa;
+    --mute:#a2b3cb;
+    --dim:#71839f;
+    --mayday:#e2443b;
+    --panpan:#f0801c;
+    --securite:#3d8ae6;
+    --relay:#f5c43c;
+    --sea:#38c5c0;
+    --f-display:'Archivo','Arial Narrow',Arial,sans-serif;
+    --f-body:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+    color-scheme:dark;
+  }
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--night);color:var(--paper);font-family:var(--f-body);font-size:16px;line-height:1.6;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--night)}
+  h1,h2,h3{font-family:var(--f-display);font-stretch:85%;font-weight:800;line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-0.005em}
+  h2{font-size:clamp(28px,4vw,40px)}
+  h3{font-size:19px;font-weight:700;font-stretch:90%}
+  p{margin:0}
+  a{color:var(--sea)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--relay);outline-offset:3px;border-radius:6px}
+  img{max-width:100%;height:auto;display:block}
+  .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+  .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .band{padding-block:88px}
+  .band.alt{background:var(--deep);border-block:1px solid var(--line)}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sea);margin-bottom:12px}
+  .lead{font-size:17px;color:var(--mute);max-width:62ch;margin-top:14px}
+  .head{margin-bottom:44px;max-width:720px}
+
+  /* NAV */
+  .nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(10,23,41,0.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--paper)}
+  .brand img{width:40px;height:40px;border-radius:10px}
+  .brand span{font-family:var(--f-display);font-weight:900;font-stretch:80%;font-size:23px;letter-spacing:0.02em}
+  .links{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .links a{color:var(--mute);text-decoration:none;font-size:14px;font-weight:600}
+  .links a:hover{color:var(--paper)}
+  .links .cta{color:var(--night);background:var(--relay);padding:8px 16px;border-radius:100px;font-weight:700}
+  .links .cta:hover{color:var(--night);background:#ffd65e}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero{background:radial-gradient(ellipse 900px 520px at 85% 10%,rgba(56,197,192,0.10),transparent 60%),radial-gradient(ellipse 700px 500px at 0% 100%,rgba(226,68,59,0.10),transparent 60%),var(--night)}
+  .hero-media{flex:1 1 520px;min-width:0;position:relative;padding-bottom:64px}
+  .hero-photo{width:100%;border-radius:20px;border:1px solid var(--line);box-shadow:0 30px 60px rgba(0,0,0,0.5);aspect-ratio:3/2;object-fit:cover;object-position:35% 30%}
+  .hero .wrap{position:relative;display:flex;align-items:center;gap:48px;padding-block:72px 64px}
+  .hero-text{flex:1 1 470px;min-width:0;display:flex;flex-direction:column;gap:22px}
+  .hero h1{font-size:clamp(36px,5.6vw,62px);font-stretch:80%}
+  .hero h1 em{font-style:normal;color:var(--mayday)}
+  .hero-text>p{font-size:18px;color:var(--mute);max-width:56ch}
+  .procedure{display:flex;flex-wrap:wrap;gap:8px}
+  .procedure span{font-family:var(--f-mono);font-size:13px;font-weight:600;padding:6px 11px;border-radius:6px;border:1px solid var(--line);background:rgba(10,23,41,0.6);color:var(--paper)}
+  .procedure b{color:var(--relay);font-weight:600}
+  .actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .play img{height:56px;width:auto}
+  .ghost{display:inline-flex;align-items:center;padding:13px 20px;border-radius:10px;border:1px solid var(--line);color:var(--paper);text-decoration:none;font-weight:700;font-size:14px}
+  .ghost:hover{border-color:var(--mute)}
+  .hero-phone{position:absolute;right:-14px;bottom:0;width:31%;max-width:190px;filter:drop-shadow(0 24px 40px rgba(0,0,0,0.6))}
+  .facts{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:14px;color:var(--mute)}
+  .facts span{display:flex;align-items:center;gap:8px}
+  .facts span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--sea);flex:none}
+
+  /* PASOS */
+  .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;counter-reset:paso}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:10px}
+  .step .n{font-family:var(--f-mono);font-size:13px;font-weight:600;color:var(--relay)}
+  .step p{color:var(--mute);font-size:15px}
+
+  /* LLAMADAS */
+  .calls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+  .call{display:flex;flex-direction:column;gap:14px;min-width:0}
+  .call .tag{border-radius:12px;padding:12px 14px;color:#fff}
+  .call .tag strong{display:block;font-family:var(--f-display);font-weight:900;font-stretch:80%;font-size:22px;letter-spacing:0.01em;line-height:1.1}
+  .call .tag small{font-size:13px;font-weight:600;opacity:0.92}
+  .t-mayday{background:var(--mayday)} .t-panpan{background:var(--panpan)} .t-securite{background:var(--securite)} .t-relay{background:var(--relay);color:#1d1606 !important}
+  .call p{font-size:14px;color:var(--mute)}
+  .shot{all:unset;cursor:zoom-in;display:block;border-radius:24px}
+  .shot img{width:100%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.45));transition:transform .2s ease}
+  .shot:hover img{transform:translateY(-4px)}
+  @media (prefers-reduced-motion:reduce){.shot img{transition:none}.shot:hover img{transform:none}}
+
+  .detail{margin-top:56px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .detail div{background:var(--deep);padding:26px;display:flex;flex-direction:column;gap:8px;min-width:0}
+  .band:not(.alt) .detail div{background:var(--night)}
+  .detail p{font-size:14.5px;color:var(--mute)}
+  .detail .ex{font-family:var(--f-mono);font-size:13px;color:var(--paper);background:rgba(255,255,255,0.05);border-radius:6px;padding:7px 10px;margin-top:4px}
+
+  /* BLOQUES TEXTO + CAPTURAS */
+  .split{display:flex;gap:56px;align-items:center;flex-wrap:wrap}
+  .split.rev{flex-direction:row-reverse}
+  .split .txt{flex:1 1 400px;min-width:0;display:flex;flex-direction:column;gap:16px}
+  .split .media{flex:1 1 460px;min-width:0;display:grid;gap:18px}
+  .m2{grid-template-columns:repeat(2,minmax(0,1fr))} .m3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .bul{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+  .bul li{display:flex;gap:12px;color:var(--mute);font-size:15px}
+  .bul li::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--relay);margin-top:8px;flex:none}
+  .bul b{color:var(--paper);font-weight:600}
+  figure{margin:0;display:flex;flex-direction:column;gap:10px;min-width:0}
+  figcaption{font-size:13px;font-weight:600;color:var(--mute);text-align:center}
+
+  .mob{display:flex;align-items:center;gap:40px;flex-wrap:wrap;margin-bottom:48px}
+  .mob img{flex:0 1 300px;min-width:0;width:300px}
+  .mob .txt{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips span{font-size:13px;font-weight:600;padding:6px 12px;border-radius:100px;background:var(--panel);border:1px solid var(--line);color:var(--paper)}
+
+  .grid5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+  .note{margin-top:28px;font-size:14px;color:var(--dim);max-width:70ch}
+
+  .meteo-first{border-left:3px solid var(--sea);padding-left:16px}
+
+  /* FAQ */
+  .faq{max-width:860px}
+  details{border-top:1px solid var(--line)}
+  details:last-of-type{border-bottom:1px solid var(--line)}
+  summary{cursor:pointer;list-style:none;padding:20px 36px 20px 0;position:relative;font-family:var(--f-display);font-stretch:90%;font-weight:700;font-size:18px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";position:absolute;right:4px;top:16px;font-family:var(--f-mono);font-size:22px;color:var(--sea)}
+  details[open] summary::after{content:"–"}
+  details p{padding:0 0 22px;color:var(--mute);font-size:15px;max-width:68ch}
+
+  /* AVISO */
+  .warn{border:1px solid rgba(226,68,59,0.45);background:rgba(226,68,59,0.08);border-radius:18px;padding:30px;display:flex;gap:20px;align-items:flex-start}
+  .warn .ico{flex:none;width:40px;height:40px;border-radius:10px;background:var(--mayday);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:24px;color:#fff}
+  .warn p{color:var(--mute);font-size:15px;max-width:80ch}
+  .warn p+p{margin-top:8px}
+  .warn strong{color:var(--paper)}
+
+  /* CTA */
+  .cta-box{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:48px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+  .cta-box .txt{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:12px}
+  .cta-box p{color:var(--mute)}
+  .cta-side{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+  .cta-side small{font-size:12px;color:var(--dim)}
+
+  footer{border-top:1px solid var(--line)}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:32px;font-size:13px;color:var(--dim)}
+  footer .l{display:flex;align-items:center;gap:10px}
+  footer img{width:28px;height:28px;border-radius:7px}
+  footer a{color:var(--mute)}
+
+  /* VISOR */
+  .viewer{position:fixed;inset:0;z-index:50;background:rgba(5,12,22,0.92);display:flex;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top,0px)) 16px calc(20px + env(safe-area-inset-bottom,0px));cursor:zoom-out}
+  .viewer img{max-height:100%;width:auto;max-width:100%}
+  .viewer button{all:unset;cursor:pointer;color:var(--paper);font-size:15px;font-weight:700;padding:8px 14px;border:1px solid var(--line);border-radius:100px;background:var(--panel)}
+  .viewer button{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px))}
+
+  @media (max-width:980px){
+    .calls{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid5{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .detail{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:760px){
+    .links a:not(.cta){display:none}
+    .band{padding-block:64px}
+    .hero .wrap{flex-direction:column;align-items:stretch;padding-block:48px}
+    .hero-media{flex:none;padding-bottom:32%}
+    .hero-text{flex:none}
+    .hero-phone{right:4px;width:30%}
+    .steps{grid-template-columns:1fr}
+    .detail{grid-template-columns:1fr}
+    .grid5{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .m3{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .mob img{width:220px}
+    .cta-box{padding:30px 22px}
+    .warn{flex-direction:column;padding:24px}
+  }
+  @media (max-width:420px){
+    .calls{gap:16px}
+    .call .tag strong{font-size:18px}
+  }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#inicio"><img src="img/icono.png" alt="" width="40" height="40"><span>MAYDAPP</span></a>
+    <nav class="links" aria-label="Secciones">
+      <a href="#llamadas">Llamadas</a>
+      <a href="#emergencias">Emergencias</a>
+      <a href="#mapa">Mapa</a>
+      <a href="#meteo">Meteo</a>
+      <a href="#faq">Preguntas</a>
+      <a class="cta" href="https://play.google.com/store/apps/details?id=com.rdrp.maydapp" target="_blank" rel="noopener">Descargar</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-text">
+        <div class="procedure" aria-label="Datos de socorro">
+          <span><b>VHF</b> canal 16</span><span><b>LSD</b> canal 70</span><span><b>SASEMAR</b> 900 202 202</span>
+        </div>
+        <h1>Tu llamada de socorro, <em>lista para leer</em> por radio.</h1>
+        <p>Con nervios y con prisa es fácil olvidar la posición, el distintivo o el orden de la llamada. MAYDAPP prepara el guion completo con tu posición GPS, los datos de tu barco y el motivo. Tú pulsas el micrófono y lees, línea a línea.</p>
+        <div class="actions">
+          <a class="play" href="https://play.google.com/store/apps/details?id=com.rdrp.maydapp" target="_blank" rel="noopener"><img src="img/google_play_es.png" alt="Disponible en Google Play" width="187" height="56"></a>
+          <a class="ghost" href="#como-funciona">Ver cómo funciona</a>
+        </div>
+        <div class="facts">
+          <span>Mapa y guiones sin cobertura</span><span>Sin registro ni publicidad</span><span>Pago único</span>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img class="hero-photo" src="img/temporal.webp" alt="Patrón con traje de agua llamando por la radio portátil mientras mira el móvil, en un velero en pleno temporal" width="1920" height="1280">
+        <img class="hero-phone" src="img/inicio.webp" alt="Pantalla de inicio de MAYDAPP con la posición, los botones MAYDAY, PAN-PAN, SÉCURITÉ y MAYDAY RELAY y la estación costera más cercana" width="640" height="1342">
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="como-funciona">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">Cómo funciona</div>
+        <h2>Se prepara una vez en puerto. Se usa en segundos en el mar.</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="n">1 · En puerto</div><h3>Rellena la ficha del barco</h3><p>Nombre, distintivo de llamada, MMSI, tipo, eslora, color y personas a bordo. Se guarda solo en tu teléfono.</p></div>
+        <div class="step"><div class="n">2 · En el momento</div><h3>Elige la llamada y el motivo</h3><p>MAYDAY, PAN-PAN, SÉCURITÉ o MAYDAY RELAY. Vía de agua, incendio, hombre al agua, orcas, avería… o escribe el tuyo.</p></div>
+        <div class="step"><div class="n">3 · Por radio</div><h3>Pulsa el micrófono y lee</h3><p>El guion sale en el orden reglamentario, con la posición en palabras y la hora UTC. Si te piden deletrear, lo tienes a un toque.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="llamadas">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">Llamadas guiadas</div>
+        <h2>Cuatro llamadas, cada una con su procedimiento.</h2>
+        <p class="lead">Cada guion lleva las palabras de procedimiento, la identificación del barco, la posición, el peligro y la ayuda que necesitas. Termina con «Cambio» para que sueltes el micrófono y escuches.</p>
+      </div>
+      <div class="calls">
+        <div class="call">
+          <div class="tag t-mayday"><strong>MAYDAY</strong><small>Socorro: peligro grave e inminente</small></div>
+          <button class="shot" type="button" data-full="img/mayday.webp"><img src="img/mayday.webp" alt="Guion MAYDAY con el deletreo fonético del nombre del barco desplegado" width="640" height="1342" loading="lazy"></button>
+          <p>La vida o el barco corren peligro. Ayuda inmediata.</p>
+        </div>
+        <div class="call">
+          <div class="tag t-panpan"><strong>PAN-PAN</strong><small>Urgencia</small></div>
+          <button class="shot" type="button" data-full="img/panpan.webp"><img src="img/panpan.webp" alt="Guion PAN-PAN por interacción con orcas" width="560" height="1174" loading="lazy"></button>
+          <p>Situación seria sin peligro inmediato para la vida.</p>
+        </div>
+        <div class="call">
+          <div class="tag t-securite"><strong>SÉCURITÉ</strong><small>Seguridad</small></div>
+          <button class="shot" type="button" data-full="img/securite.webp"><img src="img/securite.webp" alt="Guion SÉCURITÉ avisando de un objeto a la deriva peligroso para la navegación" width="560" height="1174" loading="lazy"></button>
+          <p>Avisos a la navegación: objetos a la deriva, luces apagadas…</p>
+        </div>
+        <div class="call">
+          <div class="tag t-relay"><strong>MAYDAY RELAY</strong><small>Retransmitir el socorro de otro barco</small></div>
+          <button class="shot" type="button" data-full="img/relay.webp"><img src="img/relay.webp" alt="Guion MAYDAY RELAY retransmitiendo el socorro del barco AITANA" width="560" height="1174" loading="lazy"></button>
+          <p>Cuando oyes un MAYDAY sin respuesta o el otro barco no puede llamar.</p>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div><h3>Posición como se dice por radio</h3><p>Latitud y longitud en grados y minutos, escritas en palabras, y la referencia al faro más cercano.</p><span class="ex">40 grados 38,9 minutos norte</span></div>
+        <div><h3>Deletreo a un toque</h3><p>El botón ABC muestra el nombre del barco con el alfabeto fonético internacional, como el distintivo.</p><span class="ex">Alfa Lima Bravo Alfa Tango…</span></div>
+        <div><h3>MMSI en grupos de tres</h3><p>Más fácil de leer y de entender al otro lado, sin saltarse una cifra.</p><span class="ex">MMSI 111 122 222</span></div>
+        <div><h3>Hora UTC y hora local</h3><p>La UTC va en el guion; la local, en pantalla, para que no tengas que calcular nada.</p><span class="ex">11:21 local · 09:21 UTC</span></div>
+        <div><h3>Español e inglés</h3><p>Los guiones pueden salir en inglés para llamar a barcos extranjeros o en aguas internacionales.</p><span class="ex">This is ALBATROS…</span></div>
+        <div><h3>Cancelación</h3><p>Si enviaste una alerta por error, la app te da también el guion para cancelarla.</p><span class="ex">Alerta enviada por error</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="emergencias">
+    <div class="wrap">
+      <div class="mob">
+        <img src="img/mob.webp" alt="Ilustración de un náufrago con chaleco salvavidas pidiendo ayuda entre las olas" width="640" height="613" loading="lazy">
+        <div class="txt">
+          <div class="eyebrow">Qué hacer en una emergencia</div>
+          <h2>Fichas paso a paso, basadas en las recomendaciones de Salvamento Marítimo.</h2>
+          <p class="lead">Aparecen según el motivo de tu llamada, y también se pueden consultar antes de salir. Qué hacer, en qué orden y con qué medios.</p>
+          <div class="chips">
+            <span>Hombre al agua</span><span>Incendio a bordo</span><span>Vía de agua</span><span>Bengalas y cohetes</span><span>Abandono del barco</span><span>Rescate con helicóptero</span><span>Interacción con orcas</span><span>Avería y remolque</span><span>Emergencia médica</span><span>Hipotermia</span>
+          </div>
+        </div>
+      </div>
+      <div class="m3 split-media" style="display:grid;gap:22px">
+        <figure><button class="shot" type="button" data-full="img/emergencias.webp"><img src="img/emergencias.webp" alt="Lista de fichas de emergencia" width="560" height="1174" loading="lazy"></button><figcaption>Todas las fichas</figcaption></figure>
+        <figure><button class="shot" type="button" data-full="img/hombre_agua.webp"><img src="img/hombre_agua.webp" alt="Ficha de hombre al agua con los pasos y la maniobra de Boutakov" width="560" height="1174" loading="lazy"></button><figcaption>Hombre al agua y maniobras</figcaption></figure>
+        <figure><button class="shot" type="button" data-full="img/incendio.webp"><img src="img/incendio.webp" alt="Ficha de incendio a bordo con nueve pasos" width="560" height="1174" loading="lazy"></button><figcaption>Incendio a bordo</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="mapa">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">Mapa sin conexión</div>
+        <h2>Toda la costa española dentro de la app.</h2>
+        <p class="lead">El mapa viene incluido y funciona sin datos. Muestra tu posición, la estación costera más cercana con su alcance VHF estimado y las capas que elijas: faros, puertos y marinas, y comunidades, ciudades y mares.</p>
+      </div>
+      <div class="grid5">
+        <figure><button class="shot" type="button" data-full="img/mapa.webp"><img src="img/mapa.webp" alt="Mapa con la posición del barco y el alcance de la estación más cercana" width="560" height="1174" loading="lazy"></button><figcaption>Tu posición y alcance</figcaption></figure>
+        <figure><button class="shot" type="button" data-full="img/mapa_estacion.webp"><img src="img/mapa_estacion.webp" alt="Ficha de Santander Radio con canales, MMSI, alcance estimado y teléfono del centro" width="560" height="1174" loading="lazy"></button><figcaption>Estaciones costeras</figcaption></figure>
+        <figure><button class="shot" type="button" data-full="img/mapa_faro.webp"><img src="img/mapa_faro.webp" alt="Capa de faros con la ficha del faro de Punta Silla" width="560" height="1174" loading="lazy"></button><figcaption>Faros</figcaption></figure>
+        <figure><button class="shot" type="button" data-full="img/mapa_puerto.webp"><img src="img/mapa_puerto.webp" alt="Capa de puertos con la ficha del Club Náutico de Comillas, canal VHF y teléfono" width="560" height="1174" loading="lazy"></button><figcaption>Puertos y marinas</figcaption></figure>
+        <figure><button class="shot" type="button" data-full="img/mapa_politica.webp"><img src="img/mapa_politica.webp" alt="Capa con comunidades autónomas, ciudades y mares" width="560" height="1174" loading="lazy"></button><figcaption>Comunidades y ciudades</figcaption></figure>
+      </div>
+      <p class="note">Toca una estación para ver su canal de trabajo, el canal de Salvamento Marítimo, el centro que la atiende y su teléfono. Cobertura: Península, Baleares, Canarias, Ceuta y Melilla.</p>
+    </div>
+  </section>
+
+  <section class="band" id="meteo">
+    <div class="wrap">
+      <div class="split">
+        <div class="txt">
+          <div class="eyebrow">Meteorología</div>
+          <h2>El parte de AEMET de tu tramo de costa, primero.</h2>
+          <p class="lead meteo-first">MAYDAPP localiza tu zona y te muestra el parte costero oficial de AEMET, los avisos en vigor y la tendencia, con el resto de zonas del tramo debajo.</p>
+          <ul class="bul">
+            <li><span><b>Partes costeros de AEMET</b> de todas las costas españolas, de Galicia a Canarias.</span></li>
+            <li><span><b>Viento en el mapa.</b> Partículas animadas y colores por intensidad, en nudos, con previsión para los próximos tres días.</span></li>
+            <li><span><b>Olas.</b> Altura, dirección y periodo del oleaje hasta la costa.</span></li>
+            <li><span><b>Toca un punto</b> y verás el viento o la altura de ola en ese lugar.</span></li>
+          </ul>
+          <p class="note" style="margin-top:4px">El viento y las olas son orientativos (modelo GFS de la NOAA) y no sustituyen al parte de AEMET.</p>
+        </div>
+        <div class="media m3">
+          <figure><button class="shot" type="button" data-full="img/partes.webp"><img src="img/partes.webp" alt="Parte meteorológico de AEMET para aguas costeras de Cantabria" width="560" height="1174" loading="lazy"></button><figcaption>Parte de AEMET</figcaption></figure>
+          <figure><button class="shot" type="button" data-full="img/viento.webp"><img src="img/viento.webp" alt="Capa de viento con partículas y valor de 10 nudos en el punto tocado" width="560" height="1174" loading="lazy"></button><figcaption>Viento</figcaption></figure>
+          <figure><button class="shot" type="button" data-full="img/olas.webp"><img src="img/olas.webp" alt="Capa de olas con 0,9 metros en el punto tocado" width="560" height="1174" loading="lazy"></button><figcaption>Olas</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="radioavisos">
+    <div class="wrap">
+      <div class="split rev">
+        <div class="txt">
+          <div class="eyebrow">Radioavisos</div>
+          <h2>Los radioavisos en vigor de tu zona.</h2>
+          <p class="lead">Se descargan de Salvamento Marítimo y se filtran por tu posición: ejercicios militares, objetos a la deriva, buques de investigación, faros apagados… Toca uno para abrir el documento original.</p>
+        </div>
+        <div class="media m2">
+          <figure><button class="shot" type="button" data-full="img/radioavisos.webp"><img src="img/radioavisos.webp" alt="Lista de radioavisos en vigor de las zonas NAVTEX cercanas" width="560" height="1174" loading="lazy"></button><figcaption>Avisos de tu zona</figcaption></figure>
+          <figure><button class="shot" type="button" data-full="img/radioaviso_pdf.webp"><img src="img/radioaviso_pdf.webp" alt="Documento original de un radioaviso de Salvamento Marítimo" width="560" height="1174" loading="lazy"></button><figcaption>Documento original</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="referencia">
+    <div class="wrap">
+      <div class="split">
+        <div class="txt">
+          <div class="eyebrow">Referencia y ficha del barco</div>
+          <h2>Todo lo que te pueden preguntar, a mano.</h2>
+          <ul class="bul">
+            <li><span><b>Estaciones costeras y centros de Salvamento Marítimo</b>, de la más cercana a la más lejana, con canales, distancia y rumbo.</span></li>
+            <li><span><b>Faros y puertos</b> con buscador por nombre.</span></li>
+            <li><span><b>Canales VHF</b> de socorro y trabajo, y el alfabeto fonético internacional.</span></li>
+            <li><span><b>Altura de tu antena</b> en la ficha del barco, para estimar mejor el alcance de cada estación.</span></li>
+            <li><span><b>Botón directo</b> al 900 202 202 de Salvamento Marítimo, como último recurso.</span></li>
+          </ul>
+        </div>
+        <div class="media m2">
+          <figure><button class="shot" type="button" data-full="img/referencia.webp"><img src="img/referencia.webp" alt="Referencia de estaciones costeras ordenadas por distancia" width="560" height="1174" loading="lazy"></button><figcaption>Referencia</figcaption></figure>
+          <figure><button class="shot" type="button" data-full="img/ficha_barco.webp"><img src="img/ficha_barco.webp" alt="Ficha del barco con nombre, distintivo, MMSI, eslora y altura de la antena" width="560" height="1174" loading="lazy"></button><figcaption>Ficha del barco</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="privacidad">
+    <div class="wrap">
+      <div class="split rev">
+        <div class="txt">
+          <div class="eyebrow">Privacidad y fuentes</div>
+          <h2>Tus datos se quedan en tu teléfono.</h2>
+          <p class="lead">Sin registro, sin publicidad y sin seguimiento. La posición y los datos del barco no salen del móvil. Cada dato de la app indica de dónde viene: Ministerio de Transportes, UIT, Salvamento Marítimo, AEMET, NOAA, OpenStreetMap y las autoridades portuarias.</p>
+        </div>
+        <div class="media" style="grid-template-columns:minmax(0,260px);justify-content:center">
+          <figure><button class="shot" type="button" data-full="img/acerca.webp"><img src="img/acerca.webp" alt="Pantalla Acerca de con las fuentes de cada dato" width="560" height="1174" loading="lazy"></button><figcaption>Datos y fuentes</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="faq">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">Preguntas frecuentes</div>
+        <h2>Antes de salir a navegar.</h2>
+      </div>
+      <div class="faq">
+        <details><summary>¿La app hace la llamada por mí?</summary><p>No. La llamada la haces tú por la radio VHF. MAYDAPP te da el texto exacto que tienes que leer, en el orden correcto.</p></details>
+        <details><summary>¿Funciona sin cobertura?</summary><p>Sí. Los guiones, la posición GPS, el mapa, las fichas de emergencia y la referencia funcionan sin datos. Los partes de AEMET, el viento, las olas y los radioavisos se descargan cuando hay conexión, así que conviene actualizarlos antes de salir.</p></details>
+        <details><summary>¿Sustituye a la radio, a la LSD o a la radiobaliza?</summary><p>No. Es una ayuda para preparar la llamada. En una emergencia usa siempre los medios oficiales: canal 16 de VHF, alerta LSD por el canal 70, radiobaliza, 900 202 202 o 112.</p></details>
+        <details><summary>¿Es una aplicación oficial de Salvamento Marítimo?</summary><p>No. MAYDAPP es una aplicación independiente de RDRP Studio. Usa datos públicos oficiales y cita su fuente dentro de la app.</p></details>
+        <details><summary>¿Qué costa cubre?</summary><p>La Península, Baleares, Canarias, Ceuta y Melilla, con sus estaciones costeras, faros, puertos y zonas de AEMET.</p></details>
+        <details><summary>¿En qué idioma está?</summary><p>La app está en español. Los guiones de radio pueden salir en español o en inglés.</p></details>
+        <details><summary>¿Cuánto cuesta?</summary><p>Pago único en Google Play. Sin suscripción y sin publicidad.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" style="padding-block:56px">
+    <div class="wrap">
+      <div class="warn" role="note">
+        <div class="ico" aria-hidden="true">!</div>
+        <div>
+          <p><strong>Importante.</strong> MAYDAPP es una ayuda para preparar la llamada. No sustituye a la radio VHF, a la LSD (DSC), a la radiobaliza ni a la formación reglamentaria, y no es una aplicación oficial de Salvamento Marítimo.</p>
+          <p>Los datos de estaciones, alcances y meteorología son orientativos. En caso de emergencia, usa siempre los medios oficiales: <span class="mono">canal 16</span>, <span class="mono">LSD canal 70</span>, <span class="mono">900 202 202</span> o <span class="mono">112</span>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="descargar">
+    <div class="wrap">
+      <div class="cta-box">
+        <div class="txt">
+          <h2>Llévala instalada antes de soltar amarras.</h2>
+          <p>Disponible en Google Play para Android, en España. Rellena la ficha del barco en puerto y tendrás la llamada lista cuando la necesites.</p>
+        </div>
+        <div class="cta-side">
+          <a class="play" href="https://play.google.com/store/apps/details?id=com.rdrp.maydapp" target="_blank" rel="noopener"><img src="img/google_play_es.png" alt="Disponible en Google Play" width="187" height="56"></a>
+          <small>RDRP Studio · com.rdrp.maydapp</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="l"><img src="img/icono.png" alt="" width="28" height="28"><span>© 2026 RDRP Studio · MAYDAPP</span></div>
+    <div class="l"><span>Asistente de llamadas de socorro por VHF</span><a href="https://sites.google.com/view/maydapp/inicio" target="_blank" rel="noopener">Política de privacidad</a></div>
+  </div>
+</footer>
+
+<div class="viewer" id="viewer" hidden>
+  <button type="button" id="viewer-close">Cerrar</button>
+  <img id="viewer-img" src="" alt="">
+</div>
+
+<script>
+(function(){
+  var v=document.getElementById('viewer'), vi=document.getElementById('viewer-img'), last=null;
+  function close(){ v.hidden=true; vi.src=''; if(last) last.focus(); }
+  document.querySelectorAll('.shot').forEach(function(b){
+    b.addEventListener('click',function(){
+      last=b; var img=b.querySelector('img');
+      vi.src=b.getAttribute('data-full'); vi.alt=img.alt; v.hidden=false;
+      document.getElementById('viewer-close').focus();
+    });
+  });
+  v.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !v.hidden) close(); });
+})();
+</script>
+</body>
+</html>
