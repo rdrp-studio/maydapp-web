@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="MAYDAPP prepara tu llamada de socorro por radio VHF (MAYDAY, PAN-PAN, SÉCURITÉ) con tu posición GPS y los datos de tu barco. Mapa de la costa española sin conexión, fichas de emergencia, partes de AEMET y radioavisos.">
+<meta name="description" content="MAYDAPP prepara tu llamada de socorro por radio VHF (MAYDAY, PAN-PAN, SÉCURITÉ) con tu posición GPS y los datos de tu barco. Mapa de la costa española sin conexión, fichas de emergencia, plan de travesía con ruta en el mapa, partes de AEMET y radioavisos.">
 <meta property="og:title" content="MAYDAPP · Asistente de llamadas de socorro por VHF">
 <meta property="og:description" content="Tu llamada de socorro, lista para leer por radio. Para la costa española.">
 <meta property="og:image" content="https://rdrp-studio.github.io/maydapp-web/img/og.jpg">
@@ -207,6 +207,7 @@
     <nav class="links" aria-label="Secciones">
       <a href="#llamadas">Llamadas</a>
       <a href="#emergencias">Emergencias</a>
+      <a href="#plan">Plan de travesía</a>
       <a href="#mapa">Mapa</a>
       <a href="#meteo">Meteo</a>
       <a href="#faq">Preguntas</a>
@@ -235,7 +236,7 @@
       </div>
       <div class="hero-media">
         <img class="hero-photo" src="img/temporal.webp" alt="Patrón con traje de agua llamando por la radio portátil mientras mira el móvil, en un velero en pleno temporal" width="1920" height="1280">
-        <img class="hero-phone" src="img/inicio.webp" alt="Pantalla de inicio de MAYDAPP con la posición, los botones MAYDAY, PAN-PAN, SÉCURITÉ y MAYDAY RELAY y la estación costera más cercana" width="640" height="1342">
+        <img class="hero-phone" src="img/inicio.webp" alt="Pantalla de inicio de MAYDAPP con la posición, los botones MAYDAY, PAN-PAN, SÉCURITÉ y MAYDAY RELAY, el plan de travesía y la estación costera más cercana" width="640" height="1342">
       </div>
     </div>
   </section>
@@ -247,7 +248,7 @@
         <h2>Se prepara una vez en puerto. Se usa en segundos en el mar.</h2>
       </div>
       <div class="steps">
-        <div class="step"><div class="n">1 · En puerto</div><h3>Rellena la ficha del barco</h3><p>Nombre, distintivo de llamada, MMSI, tipo, eslora, color y personas a bordo. Se guarda solo en tu teléfono.</p></div>
+        <div class="step"><div class="n">1 · En puerto</div><h3>Rellena la ficha del barco</h3><p>Nombre, matrícula, distintivo de llamada, MMSI, tipo, eslora, color y radiobaliza. Se guarda solo en tu teléfono. Antes de zarpar, deja en tierra tu plan de travesía.</p></div>
         <div class="step"><div class="n">2 · En el momento</div><h3>Elige la llamada y el motivo</h3><p>MAYDAY, PAN-PAN, SÉCURITÉ o MAYDAY RELAY. Vía de agua, incendio, hombre al agua, orcas, avería… o escribe el tuyo.</p></div>
         <div class="step"><div class="n">3 · Por radio</div><h3>Pulsa el micrófono y lee</h3><p>El guion sale en el orden reglamentario, con la posición en palabras y la hora UTC. Si te piden deletrear, lo tienes a un toque.</p></div>
       </div>
@@ -316,7 +317,33 @@
     </div>
   </section>
 
-  <section class="band alt" id="mapa">
+  <section class="band alt" id="plan">
+    <div class="wrap">
+      <div class="split">
+        <div class="txt">
+          <div class="eyebrow">Nuevo · Plan de travesía</div>
+          <h2>Que alguien en tierra sepa a dónde vas y cuándo llegas.</h2>
+          <p class="lead">Antes de soltar amarras, MAYDAPP prepara un plan de travesía en PDF y lo envía a una persona de confianza. Si no llegas y no consigue hablar contigo, el documento le dice exactamente qué hacer: llamar a Salvamento Marítimo y enviarles el plan.</p>
+          <ul class="bul">
+            <li><span><b>Todo en un documento:</b> barco, matrícula, patrón, tripulación, salida, destino, llegada prevista, equipo de seguridad y contacto en tierra.</span></li>
+            <li><span><b>Ruta en el mapa (opcional).</b> Toca para marcar los puntos, también los bordos de un velero con viento en contra, y arrástralos para ajustarlos. Cada tramo muestra su rumbo y su distancia en millas.</span></li>
+            <li><span><b>Horas de paso.</b> Con tu velocidad media, la app calcula la duración y la hora estimada en cada punto, y puede usarla como llegada prevista.</span></li>
+            <li><span><b>El mapa y la tabla de tramos van en el PDF</b>, con la posición de cada punto. Si hay que buscarte, se sabe dónde deberías estar a cada hora.</span></li>
+            <li><span><b>Llegada, retraso o cancelación</b> con un toque: tu contacto recibe el aviso y sabe que no tiene que hacer nada.</span></li>
+          </ul>
+          <p class="note" style="margin-top:4px">MAYDAPP no envía alertas automáticas: el aviso lo da tu contacto en tierra, que es quien sabe si de verdad pasa algo.</p>
+          <div><a class="ghost" href="plan_travesia_ejemplo.pdf" target="_blank" rel="noopener">Ver un plan de ejemplo (PDF)</a></div>
+        </div>
+        <div class="media m3">
+          <figure><button class="shot" type="button" data-full="img/plan_travesia.webp"><img src="img/plan_travesia.webp" alt="Formulario del plan de travesía con los datos del barco, el patrón y la tripulación" width="560" height="1174" loading="lazy"></button><figcaption>Plan de travesía</figcaption></figure>
+          <figure><button class="shot" type="button" data-full="img/plan_ruta.webp"><img src="img/plan_ruta.webp" alt="Ruta de Valencia a Sant Antoni trazada en el mapa en zig-zag, con el rumbo y la distancia de cada tramo" width="560" height="1174" loading="lazy"></button><figcaption>Ruta con rumbos y millas</figcaption></figure>
+          <figure><button class="shot" type="button" data-full="img/plan_pdf.webp"><img src="img/plan_pdf.webp" alt="PDF del plan de travesía con las instrucciones para el contacto en tierra y el mapa de la ruta" width="560" height="1174" loading="lazy"></button><figcaption>PDF para tu contacto</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="mapa">
     <div class="wrap">
       <div class="head">
         <div class="eyebrow">Mapa sin conexión</div>
@@ -334,7 +361,7 @@
     </div>
   </section>
 
-  <section class="band" id="meteo">
+  <section class="band alt" id="meteo">
     <div class="wrap">
       <div class="split">
         <div class="txt">
@@ -358,7 +385,7 @@
     </div>
   </section>
 
-  <section class="band alt" id="radioavisos">
+  <section class="band" id="radioavisos">
     <div class="wrap">
       <div class="split rev">
         <div class="txt">
@@ -374,7 +401,7 @@
     </div>
   </section>
 
-  <section class="band" id="referencia">
+  <section class="band alt" id="referencia">
     <div class="wrap">
       <div class="split">
         <div class="txt">
@@ -396,13 +423,13 @@
     </div>
   </section>
 
-  <section class="band alt" id="privacidad">
+  <section class="band" id="privacidad">
     <div class="wrap">
       <div class="split rev">
         <div class="txt">
           <div class="eyebrow">Privacidad y fuentes</div>
           <h2>Tus datos se quedan en tu teléfono.</h2>
-          <p class="lead">Sin registro, sin publicidad y sin seguimiento. La posición y los datos del barco no salen del móvil. Cada dato de la app indica de dónde viene: Ministerio de Transportes, UIT, Salvamento Marítimo, AEMET, NOAA, OpenStreetMap y las autoridades portuarias.</p>
+          <p class="lead">Sin registro, sin publicidad y sin seguimiento. La posición, los datos del barco y el plan de travesía no salen del móvil; el plan solo se envía cuando tú lo compartes con tu contacto. Cada dato de la app indica de dónde viene: Ministerio de Transportes, UIT, Salvamento Marítimo, AEMET, NOAA, OpenStreetMap y las autoridades portuarias.</p>
         </div>
         <div class="media" style="grid-template-columns:minmax(0,260px);justify-content:center">
           <figure><button class="shot" type="button" data-full="img/acerca.webp"><img src="img/acerca.webp" alt="Pantalla Acerca de con las fuentes de cada dato" width="560" height="1174" loading="lazy"></button><figcaption>Datos y fuentes</figcaption></figure>
@@ -411,7 +438,7 @@
     </div>
   </section>
 
-  <section class="band" id="faq">
+  <section class="band alt" id="faq">
     <div class="wrap">
       <div class="head">
         <div class="eyebrow">Preguntas frecuentes</div>
@@ -419,9 +446,10 @@
       </div>
       <div class="faq">
         <details><summary>¿La app hace la llamada por mí?</summary><p>No. La llamada la haces tú por la radio VHF. MAYDAPP te da el texto exacto que tienes que leer, en el orden correcto.</p></details>
-        <details><summary>¿Funciona sin cobertura?</summary><p>Sí. Los guiones, la posición GPS, el mapa, las fichas de emergencia y la referencia funcionan sin datos. Los partes de AEMET, el viento, las olas y los radioavisos se descargan cuando hay conexión, así que conviene actualizarlos antes de salir.</p></details>
+        <details><summary>¿Funciona sin cobertura?</summary><p>Sí. Los guiones, la posición GPS, el mapa, las fichas de emergencia, la referencia y el plan de travesía con su ruta funcionan sin datos. Los partes de AEMET, el viento, las olas y los radioavisos se descargan cuando hay conexión, así que conviene actualizarlos antes de salir.</p></details>
         <details><summary>¿Sustituye a la radio, a la LSD o a la radiobaliza?</summary><p>No. Es una ayuda para preparar la llamada. En una emergencia usa siempre los medios oficiales: canal 16 de VHF, alerta LSD por el canal 70, radiobaliza, 900 202 202 o 112.</p></details>
         <details><summary>¿Es una aplicación oficial de Salvamento Marítimo?</summary><p>No. MAYDAPP es una aplicación independiente de RDRP Studio. Usa datos públicos oficiales y cita su fuente dentro de la app.</p></details>
+        <details><summary>¿MAYDAPP avisa a Salvamento Marítimo si no llego?</summary><p>No. MAYDAPP no envía alertas. Genera el plan de travesía en PDF y tú se lo envías a una persona de confianza. Si no llegas a la hora prevista más el margen que elijas y no consigue contactar contigo, ella llama a Salvamento Marítimo y les envía el plan, como indica el propio documento.</p></details>
         <details><summary>¿Qué costa cubre?</summary><p>La Península, Baleares, Canarias, Ceuta y Melilla, con sus estaciones costeras, faros, puertos y zonas de AEMET.</p></details>
         <details><summary>¿En qué idioma está?</summary><p>La app está en español. Los guiones de radio pueden salir en español o en inglés.</p></details>
         <details><summary>¿Cuánto cuesta?</summary><p>Pago único en Google Play. Sin suscripción y sin publicidad.</p></details>
@@ -429,7 +457,7 @@
     </div>
   </section>
 
-  <section class="band alt" style="padding-block:56px">
+  <section class="band" style="padding-block:56px">
     <div class="wrap">
       <div class="warn" role="note">
         <div class="ico" aria-hidden="true">!</div>
@@ -441,7 +469,7 @@
     </div>
   </section>
 
-  <section class="band" id="descargar">
+  <section class="band alt" id="descargar">
     <div class="wrap">
       <div class="cta-box">
         <div class="txt">
