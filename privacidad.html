@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MAYDAPP · Política de privacidad</title>
+<meta name="description" content="Política de privacidad de MAYDAPP (RDRP Studio).">
+<link rel="icon" type="image/png" href="img/icono.png">
+<link rel="canonical" href="https://rdrp-studio.github.io/maydapp-web/privacidad.html">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@700;800&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --ocean:#07111F; --panel:#0F2035; --line:rgba(160,200,240,0.12);
+    --text:#EEF5FC; --mute:#9DB3CB; --dim:#6E87A3; --cyan:#00D4FF; --amber:#FFB800;
+    --f-display:'Barlow Semi Condensed','Arial Narrow',Arial,sans-serif;
+    --f-body:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+    color-scheme:dark;
+    padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  [hidden]{display:none!important}
+  body{margin:0;background:var(--ocean);color:var(--text);font-family:var(--f-body);font-size:17px;line-height:1.65}
+  a{color:var(--cyan)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px}
+  .wrap{max-width:820px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(7,17,31,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav .wrap{max-width:1180px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:11px}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text)}
+  .brand img{width:40px;height:40px;border-radius:10px}
+  .brand span{font-family:var(--f-display);font-weight:800;font-size:24px;letter-spacing:.03em}
+  .right{display:flex;align-items:center;gap:14px}
+  .back{color:var(--mute);text-decoration:none;font-weight:600;font-size:15px}
+  .back:hover{color:var(--text)}
+  .lang{position:relative}
+  .lang-btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;color:var(--mute);font-weight:600;font-size:14px;border:1px solid var(--line)}
+  .flag{display:inline-flex;border-radius:3px;overflow:hidden;line-height:0}
+  .lang-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px;min-width:180px;box-shadow:0 20px 40px rgba(0,0,0,.5);z-index:35}
+  .lang-menu button{all:unset;cursor:pointer;display:flex;align-items:center;gap:11px;width:100%;box-sizing:border-box;padding:9px 11px;border-radius:8px;font-size:14.5px;color:var(--text)}
+  .lang-menu button:hover,.lang-menu button[aria-current="true"]{background:rgba(0,212,255,.1)}
+  main{padding-block:56px 72px}
+  .eyebrow{font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+  h1{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,5vw,50px);line-height:1.08;margin:0 0 12px;text-wrap:balance}
+  .updated{font-family:var(--f-mono);font-size:13px;color:var(--dim)}
+  .summary{margin:30px 0 8px;padding:22px 24px;background:var(--panel);border:1px solid var(--line);border-radius:16px;font-size:19px;font-weight:600}
+  h2{font-family:var(--f-display);font-weight:700;font-size:25px;line-height:1.15;margin:40px 0 10px;text-wrap:balance}
+  p{margin:0 0 12px;color:var(--mute)}
+  p strong{color:var(--text)}
+  ul{margin:0 0 12px;padding-left:22px;color:var(--mute)}
+  li{margin:4px 0}
+  .contact{font-family:var(--f-mono);font-size:15px;color:var(--text);user-select:all}
+  footer{border-top:1px solid var(--line)}
+  footer .wrap{max-width:1180px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:26px;font-size:14px;color:var(--dim)}
+  @media (max-width:480px){.lang-btn .lname{display:none}.brand span{font-size:21px}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="img/icono.png" alt="" width="40" height="40"><span>MAYDAPP</span></a>
+    <div class="right">
+      <a class="back" href="index.html" data-t="back">← Volver</a>
+      <div class="lang">
+        <button class="lang-btn" id="lang-btn" type="button" aria-haspopup="true" aria-expanded="false"><span class="flag" id="lang-flag"></span><span class="lname" id="lang-name">Español</span></button>
+        <div class="lang-menu" id="lang-menu" hidden></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="doc"></main>
+
+<footer><div class="wrap"><span>© 2026 RDRP Studio · MAYDAPP</span><a href="index.html" data-t="back" style="color:var(--mute)">← Volver</a></div></footer>
+
+<script>
+(function(){
+var EMAIL = "delrosalr@gmail.com";
+var P = {
+es:{ _name:"Espa\u00f1ol", title:"MAYDAPP · Política de privacidad", back:"← Volver",
+  eyebrow:"MAYDAPP · RDRP Studio", h1:"Política de privacidad", updated:"Última actualización: 27 de noviembre de 2026",
+  summary:"MAYDAPP no recoge, guarda en servidores ni comparte ningún dato personal. Tus datos se quedan en tu teléfono.",
+  s:[
+   ["Quién es el responsable", "<p>MAYDAPP es una aplicación de ayuda para las llamadas de socorro y urgencia por radio VHF, desarrollada por <strong>RDRP Studio</strong> (RDRP Consulting, S.L., NIF B13897004), con domicilio en Collado Villalba (Madrid), España. Para cualquier cuestión sobre privacidad puedes escribir a la dirección de contacto que aparece al final.</p>"],
+   ["Qué datos recoge", "<p>Ninguno. MAYDAPP no tiene cuentas de usuario ni registro, y no envía a RDRP Studio ni a terceros tu nombre, tu correo, tu posición, los datos de tu barco ni ningún otro dato personal.</p>"],
+   ["Tu posición", "<p>La app usa el GPS del teléfono para mostrar tu posición en el mapa y escribirla en el guion de la llamada. La posición se usa solo dentro del teléfono y no se guarda en servidores ni se envía a nadie.</p>"],
+   ["Datos del barco y plan de travesía", "<p>Los datos de tu barco, los contactos de emergencia y el plan de travesía se guardan solo en tu teléfono y se borran al desinstalar la app. El plan de travesía en PDF solo sale del teléfono cuando tú decides compartirlo, con la persona y la app que elijas.</p>"],
+   ["Conexiones a internet", "<p>Con conexión, la app descarga los partes y avisos de AEMET, la previsión de viento y olas (NOAA), los radioavisos y los mapas de OpenStreetMap. Esas peticiones solo indican la zona que se consulta, como cualquier app de mapas o de meteorología, y no incluyen datos personales ni identificadores.</p>"],
+   ["Publicidad y analítica", "<p>MAYDAPP no muestra publicidad ni incluye herramientas de analítica o de seguimiento de terceros.</p>"],
+   ["Compra en Google Play", "<p>La compra de la app la gestiona Google Play. RDRP Studio no recibe tus datos de pago; Google los trata según su propia política de privacidad.</p>"],
+   ["Menores", "<p>MAYDAPP no está dirigida específicamente a menores y no recoge datos de usuarios de ninguna edad.</p>"],
+   ["Esta web", "<p>Esta web no usa cookies ni analítica. Solo guarda en tu navegador el idioma que eliges, para mostrártelo la próxima vez. Las fuentes tipográficas se cargan desde Google Fonts.</p>"],
+   ["Cambios en esta política", "<p>Si esta política cambia, la nueva versión se publicará en esta misma página con la fecha de última actualización.</p>"],
+   ["Contacto", "<p>Para cualquier pregunta sobre esta política:</p>"]
+  ]},
+en:{ _name:"English", title:"MAYDAPP · Privacy policy", back:"← Back",
+  eyebrow:"MAYDAPP · RDRP Studio", h1:"Privacy policy", updated:"Last updated: 27 November 2026",
+  summary:"MAYDAPP does not collect, store on servers or share any personal data. Your data stays on your phone.",
+  s:[
+   ["Who is responsible", "<p>MAYDAPP is an aid for distress and urgency calls on VHF radio, developed by <strong>RDRP Studio</strong> (RDRP Consulting, S.L., NIF B13897004), based in Collado Villalba (Madrid), Spain. For any privacy question you can write to the contact address at the end of this page.</p>"],
+   ["What data it collects", "<p>None. MAYDAPP has no user accounts or sign-up, and does not send your name, email, position, boat details or any other personal data to RDRP Studio or to third parties.</p>"],
+   ["Your position", "<p>The app uses the phone's GPS to show your position on the map and write it into the call script. The position is used only on the phone and is not stored on servers or sent to anyone.</p>"],
+   ["Boat details and passage plan", "<p>Your boat details, emergency contacts and passage plan are saved only on your phone and are deleted when you uninstall the app. The passage plan PDF only leaves the phone when you choose to share it, with the person and app you choose.</p>"],
+   ["Internet connections", "<p>When online, the app downloads AEMET forecasts and warnings, wind and wave forecasts (NOAA), navigational warnings and OpenStreetMap maps. These requests only contain the area being looked up, as with any map or weather app, and include no personal data or identifiers.</p>"],
+   ["Advertising and analytics", "<p>MAYDAPP shows no advertising and includes no third-party analytics or tracking tools.</p>"],
+   ["Purchase on Google Play", "<p>The purchase of the app is handled by Google Play. RDRP Studio does not receive your payment details; Google processes them under its own privacy policy.</p>"],
+   ["Children", "<p>MAYDAPP is not specifically aimed at children and collects no data from users of any age.</p>"],
+   ["This website", "<p>This website uses no cookies or analytics. It only stores in your browser the language you choose, to show it next time. Fonts are loaded from Google Fonts.</p>"],
+   ["Changes to this policy", "<p>If this policy changes, the new version will be published on this page with the date of the last update.</p>"],
+   ["Contact", "<p>For any question about this policy:</p>"]
+  ]}
+};
+var FLAGS = {
+  es:'<svg width="20" height="14" viewBox="0 0 30 20"><rect width="30" height="20" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/></svg>',
+  en:'<svg width="20" height="14" viewBox="0 0 30 20"><rect width="30" height="20" fill="#00247d"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#fff" stroke-width="4"/><path d="M0,0 L30,20 M30,0 L0,20" stroke="#cf142b" stroke-width="2"/><path d="M15,0 V20 M0,10 H30" stroke="#fff" stroke-width="6"/><path d="M15,0 V20 M0,10 H30" stroke="#cf142b" stroke-width="3"/></svg>',
+  de:'<svg width="20" height="14" viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#DD0000"/><rect y="13.33" width="30" height="6.67" fill="#FFCE00"/></svg>',
+  fr:'<svg width="20" height="14" viewBox="0 0 30 20"><rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#EF4135"/></svg>',
+  it:'<svg width="20" height="14" viewBox="0 0 30 20"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/></svg>',
+  pt:'<svg width="20" height="14" viewBox="0 0 30 20"><rect width="30" height="20" fill="#DA291C"/><rect width="12" height="20" fill="#046A38"/><circle cx="12" cy="10" r="4" fill="#FFCC00" stroke="#046A38" stroke-width="0.6"/></svg>'
+};
+var LANGS=["es","en"], menu=document.getElementById("lang-menu"), btn=document.getElementById("lang-btn");
+LANGS.forEach(function(l){
+  var b=document.createElement("button"); b.type="button"; b.dataset.code=l;
+  b.innerHTML='<span class="flag">'+FLAGS[l]+'</span><span>'+P[l]._name+'</span>';
+  b.addEventListener("click",function(){ setLang(l,true); menu.hidden=true; btn.setAttribute("aria-expanded","false"); });
+  menu.appendChild(b);
+});
+btn.addEventListener("click",function(e){ e.stopPropagation(); menu.hidden=!menu.hidden; btn.setAttribute("aria-expanded",String(!menu.hidden)); });
+document.addEventListener("click",function(e){ if(!menu.hidden && !menu.contains(e.target)) menu.hidden=true; });
+document.addEventListener("keydown",function(e){ if(e.key==="Escape") menu.hidden=true; });
+
+function setLang(l,remember){
+  if(!P[l]) l="es"; var t=P[l];
+  document.documentElement.lang=l; document.title=t.title;
+  var h='<div class="eyebrow">'+t.eyebrow+'</div><h1>'+t.h1+'</h1><div class="updated">'+t.updated+'</div><div class="summary">'+t.summary+'</div>';
+  t.s.forEach(function(x){ h+='<h2>'+x[0]+'</h2>'+x[1]; });
+  h+='<p class="contact">'+EMAIL+'</p><p>RDRP Studio</p>';
+  document.getElementById("doc").innerHTML=h;
+  document.querySelectorAll("[data-t]").forEach(function(el){ el.textContent=t[el.getAttribute("data-t")]; });
+  document.getElementById("lang-flag").innerHTML=FLAGS[l];
+  document.getElementById("lang-name").textContent=t._name;
+  menu.querySelectorAll("button").forEach(function(b){ b.setAttribute("aria-current",String(b.dataset.code===l)); });
+  if(remember){ try{ localStorage.setItem("maydapp-lang",l); }catch(e){} }
+}
+var start=null;
+var q=(location.hash||"").replace("#","");
+if(LANGS.indexOf(q)>=0) start=q;
+if(!start){ try{ start=localStorage.getItem("maydapp-lang"); }catch(e){} }
+if(!start){ var n=(navigator.languages&&navigator.languages[0])||navigator.language||"es"; start=n.slice(0,2).toLowerCase(); }
+setLang(LANGS.indexOf(start)>=0?start:"es",false);
+})();
+</script>
+</body>
+</html>
